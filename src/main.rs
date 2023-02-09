@@ -1,99 +1,162 @@
-#![warn(clippy::all)]
-//use std::io;
-use std::io::{self, Write};
+//use std::collections::HashMap;
+use std::io;
 
-pub mod menu {
-    pub enum MenuOption {
-        AddBill,
-        ViewBills,
+/// 'Debug' to easily print on terminal and 'Clone' to make copies of the struct
+#[derive(Debug, Clone)]
+pub struct Bill {
+    name: String,
+    amount: f64,
+}
+
+/// Superstructure
+pub struct Bills {
+    /// vec![{name: String, amount: f64}]
+    inner: Vec<Bill>,
+}
+
+impl Bills {
+    /// Instanciate a new 'Bills' struct with an empty vector
+    fn new() -> Self {
+        Self { inner: vec![] }
     }
 
-    impl MenuOption {
-        pub fn new(option: &str) -> Option<MenuOption> {
-            let option = option.trim();
-            match option {
-                "1" => Some(MenuOption::AddBill),
-                "2" => Some(MenuOption::ViewBills),
-                _ => None,
-            }
-        }
+    /// Add a new bill
+    /// '&mut self' access mutably the 'inner: Vec<Bill>' on the 'Bills' struct
+    /// The owned 'Bill' moves into the 'Bills' struct 'Vec<Bill>'
+    /// Push the new bill into the vector
+    fn add(&mut self, bill: Bill) {
+        self.inner.push(bill);
     }
-    pub fn menu_choice(choice: MenuOption) {
-        use crate::add_bill;
-        match choice {
-            MenuOption::AddBill => add_bill(),
-            MenuOption::ViewBills => println!("View bills chosen"),
-        }
+
+    /// Print the bills
+    /// Return a reference to the vector
+    /// Reference to itself '&self' so it's able to access the 'Bills' struct
+    /// 'iter()' over all bills, automaticaly borrows
+    /// 'collect()' collects into a new vector
+    fn get_all_bills(&self) -> Vec<&Bill> {
+        self.inner.iter().collect()
     }
 }
 
-pub mod add {
-    #[derive(Debug)]
-    pub struct Add {
-        name: String,
-        amount_owned: f64,
-    }
-
-    impl Add {
-        pub fn new(name: &str, amount_owned: f64) -> Add {
-            Add {
-                name: name.to_string(),
-                amount_owned,
-            }
-        }
-    }
-}
-
-fn add_bill() {
-    // Reference: https://users.rust-lang.org/t/how-to-read-an-integer-from-stdin/57538/2
-    use add::*;
+fn get_input() -> Option<String> {
     let mut buffer = String::new();
-    println!("Name:");
-    print!("> ");
-    io::stdin()
-        .read_line(&mut buffer)
-        .expect("Expected a string as input");
-    let _ = io::stdout().flush();
-    let name = buffer.trim();
 
-    let mut number_buffer = String::new();
-    println!("Amount owned:");
-    print!("> ");
-    io::stdin()
-        .read_line(&mut number_buffer)
-        .expect("Expected a floating number as input");
-    let _ = io::stdout().flush();
-    let amount: f64 = number_buffer.trim().parse().expect("Expected a number");
+    // Loop until gets valid data
+    while io::stdin().read_line(&mut buffer).is_err() {
+        println!("Please enter your data again...");
+    }
 
-    let add = Add::new(name, amount);
-    println!("{:?}", add);
+    // Get rid of newline(\n) at the end using 'trim()' and make the string owned (because buffer is a 'String')
+    let input = buffer.trim().to_owned();
+
+    if &input == "" {
+        None
+    } else {
+        Some(input)
+    }
+}
+
+fn get_amount_as_float() -> Option<f64> {
+    println!("Amount:");
+
+    // 'return' is used to the the desired result out of the loop
+    loop {
+        // Get input
+        let input = match get_input() {
+            Some(input) => input,
+            None => return None,
+        };
+
+        // Get out if none
+        if &input == "" {
+            return None;
+        }
+
+        // Parse the input string into a float
+        // Let Rust figure out the error type
+        let parsed_input: Result<f64, _> = input.parse();
+        match parsed_input {
+            Ok(amount) => return Some(amount),
+            Err(_) => println!("Invalid input. No word or symbol allowed. Please enter a number."),
+        }
+    }
+}
+
+mod menu {
+    use crate::{get_amount_as_float, get_input, Bill, Bills};
+
+    /// Acceps mutable reference to the 'Bills' struct in order to add new bills to the struct
+    pub fn add_bill(bills: &mut Bills) {
+        println!("Bill name:");
+
+        // Name
+        let name = match get_input() {
+            // Populate 'name' with the input, otherwise get out of the function
+            Some(input) => input,
+            None => return,
+        };
+
+        // Amount
+        let amount = match get_amount_as_float() {
+            Some(amount) => amount,
+            None => return,
+        };
+
+        // Create bill
+        // Field names are the same as the variable names, no need to do assignments, i.e.: 'name: name'
+        let bill = Bill { name, amount };
+        bills.add(bill);
+        println!("Bill added successfully!");
+    }
+
+    /// View all bills
+    pub fn view_bills(bills: &Bills) {
+        for bill in bills.get_all_bills() {
+            // Same as 'println!("{:?}", bill);'
+            println!("{bill:?}");
+        }
+    }
+}
+
+enum MainMenu {
+    AddBill,
+    ViewBill,
+}
+
+impl MainMenu {
+    pub fn get_menu_string(input: &str) -> Option<MainMenu> {
+        match input {
+            "1" => Some(MainMenu::AddBill),
+            "2" => Some(MainMenu::ViewBill),
+            _ => None,
+        }
+    }
+
+    fn show() {
+        println!("");
+        println!(" == Bill Manager == ");
+        println!("1. Add Bill");
+        println!("2. View Bill");
+        println!("");
+        println!("Enter selection: ");
+    }
 }
 
 fn main() {
-    use menu::*;
-    // Create an empty string
-    let mut buffer = String::new();
+    // Create bill structure
+    let mut build_bill_struct = Bills::new();
 
-    println!(
-        "
-    == Manage Bills ==
-    1. Add bill
-    2. View bills\n
-    Enter selection:"
-    );
-    print!("> ");
-
-    // Get user input
-    let get_input = io::stdin().read_line(&mut buffer);
-    let _ = io::stdout().flush();
-    //let answer = buffer.trim();
-
-    if get_input.is_ok() {
-        match MenuOption::new(&buffer) {
-            Some(buffer) => menu_choice(buffer),
-            None => println!("Invalid option"),
+    loop {
+        // Display the menu
+        MainMenu::show();
+        let input = get_input().expect("no data entered");
+        // 'as_str()' to turn 'String' into '&str'
+        match MainMenu::get_menu_string(input.as_str()) {
+            Some(MainMenu::AddBill) => menu::add_bill(&mut build_bill_struct),
+            Some(MainMenu::ViewBill) => menu::view_bills(&build_bill_struct),
+            // If 'None' is returned, exit the program
+            None => return,
         }
-    } else {
-        println!("Error")
+        // Make a coice, based on input
     }
 }
