@@ -160,23 +160,37 @@
 <span id="160">160</span>
 <span id="161">161</span>
 <span id="162">162</span>
+<span id="163">163</span>
+<span id="164">164</span>
+<span id="165">165</span>
+<span id="166">166</span>
+<span id="167">167</span>
+<span id="168">168</span>
+<span id="169">169</span>
+<span id="170">170</span>
+<span id="171">171</span>
+<span id="172">172</span>
+<span id="173">173</span>
+<span id="174">174</span>
 </pre><pre class="rust"><code><span class="comment">//use std::collections::HashMap;
 </span><span class="kw">use </span>std::io;
 
-<span class="doccomment">/// &#39;Debug&#39; to easily print on terminal and &#39;Clone&#39; to make copies of the struct
+<span class="doccomment">/// The bill template
+/// &#39;Debug&#39; to easily print on terminal and &#39;Clone&#39; to make copies of the struct
 </span><span class="attribute">#[derive(Debug, Clone)]
 </span><span class="kw">pub struct </span>Bill {
     name: String,
     amount: f64,
 }
 
-<span class="doccomment">/// Superstructure
+<span class="doccomment">/// &#39;Bills&#39; superstructure, the &quot;storage&quot;
 </span><span class="kw">pub struct </span>Bills {
     <span class="doccomment">/// vec![{name: String, amount: f64}]
     </span>inner: Vec&lt;Bill&gt;,
 }
 
-<span class="kw">impl </span>Bills {
+<span class="doccomment">/// &#39;Bills&#39; &quot;storage&quot; superstructre implementation
+</span><span class="kw">impl </span>Bills {
     <span class="doccomment">/// Instanciate a new &#39;Bills&#39; struct with an empty vector
     </span><span class="kw">fn </span>new() -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{ inner: <span class="macro">vec!</span>[] }
@@ -200,28 +214,32 @@
     }
 }
 
-<span class="kw">fn </span>get_input() -&gt; <span class="prelude-ty">Option</span>&lt;String&gt; {
-    <span class="kw">let </span><span class="kw-2">mut </span>buffer = String::new();
+<span class="doccomment">/// Get the user input data as a &#39;String&#39;
+</span><span class="kw">fn </span>get_input() -&gt; <span class="prelude-ty">Option</span>&lt;String&gt; {
+    <span class="comment">// Empty &#39;String&#39; template
+    </span><span class="kw">let </span><span class="kw-2">mut </span>buffer = String::new();
 
     <span class="comment">// Loop until gets valid data
     </span><span class="kw">while </span>io::stdin().read_line(<span class="kw-2">&amp;mut </span>buffer).is_err() {
         <span class="macro">println!</span>(<span class="string">&quot;Please enter your data again...&quot;</span>);
     }
 
-    <span class="comment">// Get rid of newline(\n) at the end using &#39;trim()&#39; and make the string owned (because buffer is a &#39;String&#39;)
+    <span class="comment">// Get rid of newline(\n) at the end using &#39;trim()&#39; and make the &#39;String&#39; owned (because &#39;buffer&#39; is a &#39;String&#39;)
     </span><span class="kw">let </span>input = buffer.trim().to_owned();
 
-    <span class="kw">if </span><span class="kw-2">&amp;</span>input == <span class="string">&quot;&quot; </span>{
+    <span class="comment">// If empty, return nothing
+    </span><span class="kw">if </span><span class="kw-2">&amp;</span>input == <span class="string">&quot;&quot; </span>{
         <span class="prelude-val">None
     </span>} <span class="kw">else </span>{
         <span class="prelude-val">Some</span>(input)
     }
 }
 
-<span class="kw">fn </span>get_amount_as_float() -&gt; <span class="prelude-ty">Option</span>&lt;f64&gt; {
+<span class="doccomment">/// Transform the &#39;String&#39; bill amount input into a &#39;f64&#39;
+</span><span class="kw">fn </span>get_amount_as_float() -&gt; <span class="prelude-ty">Option</span>&lt;f64&gt; {
     <span class="macro">println!</span>(<span class="string">&quot;Amount:&quot;</span>);
 
-    <span class="comment">// &#39;return&#39; is used to the the desired result out of the loop
+    <span class="comment">// &#39;return&#39; is used to capture the desired result and get out of the loop
     </span><span class="kw">loop </span>{
         <span class="comment">// Get input
         </span><span class="kw">let </span>input = <span class="kw">match </span>get_input() {
@@ -235,7 +253,7 @@
         }
 
         <span class="comment">// Parse the input string into a float
-        // Let Rust figure out the error type
+        // Let Rust figure out the error type since it&#39;s not relevant
         </span><span class="kw">let </span>parsed_input: <span class="prelude-ty">Result</span>&lt;f64, <span class="kw">_</span>&gt; = input.parse();
         <span class="kw">match </span>parsed_input {
             <span class="prelude-val">Ok</span>(amount) =&gt; <span class="kw">return </span><span class="prelude-val">Some</span>(amount),
@@ -244,7 +262,8 @@
     }
 }
 
-<span class="kw">mod </span>menu {
+<span class="doccomment">/// Main menu features
+</span><span class="kw">mod </span>menu {
     <span class="kw">use crate</span>::{get_amount_as_float, get_input, Bill, Bills};
 
     <span class="doccomment">/// Acceps mutable reference to the &#39;Bills&#39; struct in order to add new bills to the struct
@@ -264,7 +283,7 @@
             <span class="prelude-val">None </span>=&gt; <span class="kw">return</span>,
         };
 
-        <span class="comment">// Create bill
+        <span class="comment">// Create the bill
         // Field names are the same as the variable names, no need to do assignments, i.e.: &#39;name: name&#39;
         </span><span class="kw">let </span>bill = Bill { name, amount };
         bills.add(bill);
@@ -280,12 +299,14 @@
     }
 }
 
-<span class="kw">enum </span>MainMenu {
+<span class="doccomment">/// Main menu options
+</span><span class="kw">enum </span>MainMenu {
     AddBill,
     ViewBill,
 }
 
-<span class="kw">impl </span>MainMenu {
+<span class="doccomment">/// Determine choice by implementing the &#39;MainMenu&#39; options
+</span><span class="kw">impl </span>MainMenu {
     <span class="kw">pub fn </span>get_menu_string(input: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Option</span>&lt;MainMenu&gt; {
         <span class="kw">match </span>input {
             <span class="string">&quot;1&quot; </span>=&gt; <span class="prelude-val">Some</span>(MainMenu::AddBill),
@@ -311,16 +332,19 @@
     <span class="kw">loop </span>{
         <span class="comment">// Display the menu
         </span>MainMenu::show();
-        <span class="kw">let </span>input = get_input().expect(<span class="string">&quot;no data entered&quot;</span>);
-        <span class="comment">// &#39;as_str()&#39; to turn &#39;String&#39; into &#39;&amp;str&#39;
+
+        <span class="comment">// Get input
+        </span><span class="kw">let </span>input = get_input().expect(<span class="string">&quot;no data entered&quot;</span>);
+
+        <span class="comment">// &#39;match&#39; the user input to determine which feature to execute
+        // &#39;as_str()&#39; to transform &#39;String&#39; into &#39;&amp;str&#39;
         </span><span class="kw">match </span>MainMenu::get_menu_string(input.as_str()) {
             <span class="prelude-val">Some</span>(MainMenu::AddBill) =&gt; menu::add_bill(<span class="kw-2">&amp;mut </span>build_bill_struct),
             <span class="prelude-val">Some</span>(MainMenu::ViewBill) =&gt; menu::view_bills(<span class="kw-2">&amp;</span>build_bill_struct),
             <span class="comment">// If &#39;None&#39; is returned, exit the program
             </span><span class="prelude-val">None </span>=&gt; <span class="kw">return</span>,
         }
-        <span class="comment">// Make a coice, based on input
-    </span>}
+    }
 }
 </code></pre></div>
 </section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="billy" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0 (897e37553 2022-11-02)" ></div></body></html>

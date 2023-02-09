@@ -1,6 +1,7 @@
 //use std::collections::HashMap;
 use std::io;
 
+/// The bill template
 /// 'Debug' to easily print on terminal and 'Clone' to make copies of the struct
 #[derive(Debug, Clone)]
 pub struct Bill {
@@ -8,12 +9,13 @@ pub struct Bill {
     amount: f64,
 }
 
-/// Bills superstructure
+/// 'Bills' superstructure, the "storage"
 pub struct Bills {
     /// vec![{name: String, amount: f64}]
     inner: Vec<Bill>,
 }
 
+/// 'Bills' "storage" superstructre implementation
 impl Bills {
     /// Instanciate a new 'Bills' struct with an empty vector
     fn new() -> Self {
@@ -38,7 +40,9 @@ impl Bills {
     }
 }
 
+/// Get the user input data as a 'String'
 fn get_input() -> Option<String> {
+    // Empty 'String' template
     let mut buffer = String::new();
 
     // Loop until gets valid data
@@ -46,9 +50,10 @@ fn get_input() -> Option<String> {
         println!("Please enter your data again...");
     }
 
-    // Get rid of newline(\n) at the end using 'trim()' and make the string owned (because buffer is a 'String')
+    // Get rid of newline(\n) at the end using 'trim()' and make the 'String' owned (because 'buffer' is a 'String')
     let input = buffer.trim().to_owned();
 
+    // If empty, return nothing
     if &input == "" {
         None
     } else {
@@ -56,10 +61,11 @@ fn get_input() -> Option<String> {
     }
 }
 
+/// Transform the 'String' bill amount input into a 'f64'
 fn get_amount_as_float() -> Option<f64> {
     println!("Amount:");
 
-    // 'return' is used to the the desired result out of the loop
+    // 'return' is used to capture the desired result and get out of the loop
     loop {
         // Get input
         let input = match get_input() {
@@ -73,7 +79,7 @@ fn get_amount_as_float() -> Option<f64> {
         }
 
         // Parse the input string into a float
-        // Let Rust figure out the error type
+        // Let Rust figure out the error type since it's not relevant
         let parsed_input: Result<f64, _> = input.parse();
         match parsed_input {
             Ok(amount) => return Some(amount),
@@ -82,6 +88,7 @@ fn get_amount_as_float() -> Option<f64> {
     }
 }
 
+/// Main menu features
 mod menu {
     use crate::{get_amount_as_float, get_input, Bill, Bills};
 
@@ -102,7 +109,7 @@ mod menu {
             None => return,
         };
 
-        // Create bill
+        // Create the bill
         // Field names are the same as the variable names, no need to do assignments, i.e.: 'name: name'
         let bill = Bill { name, amount };
         bills.add(bill);
@@ -118,11 +125,13 @@ mod menu {
     }
 }
 
+/// Main menu options
 enum MainMenu {
     AddBill,
     ViewBill,
 }
 
+/// Determine choice by implementing the 'MainMenu' options
 impl MainMenu {
     pub fn get_menu_string(input: &str) -> Option<MainMenu> {
         match input {
@@ -149,14 +158,17 @@ fn main() {
     loop {
         // Display the menu
         MainMenu::show();
+
+        // Get input
         let input = get_input().expect("no data entered");
-        // 'as_str()' to turn 'String' into '&str'
+
+        // 'match' the user input to determine which feature to execute
+        // 'as_str()' to transform 'String' into '&str'
         match MainMenu::get_menu_string(input.as_str()) {
             Some(MainMenu::AddBill) => menu::add_bill(&mut build_bill_struct),
             Some(MainMenu::ViewBill) => menu::view_bills(&build_bill_struct),
             // If 'None' is returned, exit the program
             None => return,
         }
-        // Make a coice, based on input
     }
 }
