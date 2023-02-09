@@ -134,7 +134,7 @@ impl MainMenu {
 
     fn show() {
         println!("");
-        println!(" == Bill Manager == ");
+        println!(" == Billy The Bill Manager == ");
         println!("1. Add Bill");
         println!("2. View Bill");
         println!("");

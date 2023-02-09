@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":[["MainMenu",""]],"fn":[["get_amount_as_float",""],["get_input",""],["main",""]],"mod":[["menu",""]],"struct":[["Bill","‘Debug’ to easily print on terminal and ‘Clone’ to make copies of the struct"],["Bills","Superstructure"]]};
