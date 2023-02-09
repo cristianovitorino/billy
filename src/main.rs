@@ -8,7 +8,7 @@ pub struct Bill {
     amount: f64,
 }
 
-/// Superstructure
+/// Bills superstructure
 pub struct Bills {
     /// vec![{name: String, amount: f64}]
     inner: Vec<Bill>,
