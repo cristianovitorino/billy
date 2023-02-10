@@ -172,45 +172,60 @@
 <span id="172">172</span>
 <span id="173">173</span>
 <span id="174">174</span>
-</pre><pre class="rust"><code><span class="comment">//use std::collections::HashMap;
-</span><span class="kw">use </span>std::io;
+<span id="175">175</span>
+<span id="176">176</span>
+<span id="177">177</span>
+<span id="178">178</span>
+<span id="179">179</span>
+<span id="180">180</span>
+<span id="181">181</span>
+<span id="182">182</span>
+<span id="183">183</span>
+<span id="184">184</span>
+<span id="185">185</span>
+<span id="186">186</span>
+<span id="187">187</span>
+<span id="188">188</span>
+<span id="189">189</span>
+<span id="190">190</span>
+<span id="191">191</span>
+</pre><pre class="rust"><code><span class="kw">use </span>std::collections::HashMap;
+<span class="kw">use </span>std::io;
 
-<span class="doccomment">/// The bill template
+<span class="doccomment">/// The bills template
 /// &#39;Debug&#39; to easily print on terminal and &#39;Clone&#39; to make copies of the struct
 </span><span class="attribute">#[derive(Debug, Clone)]
-</span><span class="kw">pub struct </span>Bill {
-    name: String,
-    amount: f64,
-}
-
-<span class="doccomment">/// &#39;Bills&#39; superstructure, the &quot;storage&quot;
 </span><span class="kw">pub struct </span>Bills {
-    <span class="doccomment">/// vec![{name: String, amount: f64}]
-    </span>inner: Vec&lt;Bill&gt;,
+    info: HashMap&lt;String, f64&gt;,
 }
 
 <span class="doccomment">/// &#39;Bills&#39; &quot;storage&quot; superstructre implementation
 </span><span class="kw">impl </span>Bills {
-    <span class="doccomment">/// Instanciate a new &#39;Bills&#39; struct with an empty vector
+    <span class="doccomment">/// Instanciate a new &#39;Bills&#39; struct with an empty HashMap
     </span><span class="kw">fn </span>new() -&gt; <span class="self">Self </span>{
-        <span class="self">Self </span>{ inner: <span class="macro">vec!</span>[] }
+        <span class="self">Self </span>{
+            info: HashMap::new(),
+        }
     }
 
     <span class="doccomment">/// Add a new bill
-    /// &#39;&amp;mut self&#39; access mutably the &#39;inner: Vec&lt;Bill&gt;&#39; on the &#39;Bills&#39; struct
-    /// The owned &#39;Bill&#39; moves into the &#39;Bills&#39; struct &#39;Vec&lt;Bill&gt;&#39;
-    /// Push the new bill into the vector
-    </span><span class="kw">fn </span>add(<span class="kw-2">&amp;mut </span><span class="self">self</span>, bill: Bill) {
-        <span class="self">self</span>.inner.push(bill);
+    /// &#39;&amp;mut self&#39; access mutably the &#39;info: HashMap&lt;String, f64&gt;&#39; on the &#39;Bills&#39; struct
+    /// The owned &#39;name&#39; and &#39;amount&#39; moves into the &#39;Bills&#39; struct type &#39;HashMap&lt;String, f64&gt;&#39;
+    /// Inserts the new bill &#39;info&#39; into the HashMap
+    </span><span class="kw">fn </span>add(<span class="kw-2">&amp;mut </span><span class="self">self</span>, name: String, amount: f64) {
+        <span class="self">self</span>.info.insert(name, amount);
     }
 
     <span class="doccomment">/// Print the bills
-    /// Return a reference to the vector
-    /// Reference to itself &#39;&amp;self&#39; so it&#39;s able to access the &#39;Bills&#39; struct
-    /// &#39;iter()&#39; over all bills, automaticaly borrows
-    /// &#39;collect()&#39; collects into a new vector
-    </span><span class="kw">fn </span>get_all_bills(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Vec&lt;<span class="kw-2">&amp;</span>Bill&gt; {
-        <span class="self">self</span>.inner.iter().collect()
+    /// Reference itself &#39;&amp;self&#39; so it&#39;s able to access the &#39;Bills&#39; struct
+    /// Return a reference to the &#39;Bill&#39; struct info &#39;HashMap&lt;String, f64&gt;&#39;
+    </span><span class="kw">fn </span>get_all_bills(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>HashMap&lt;String, f64&gt; {
+        <span class="kw">return </span><span class="kw-2">&amp;</span><span class="self">self</span>.info;
+    }
+
+    <span class="doccomment">/// Remove a bill
+    </span><span class="kw">fn </span>remove(<span class="kw-2">&amp;mut </span><span class="self">self</span>, name: String) {
+        <span class="self">self</span>.info.remove(<span class="kw-2">&amp;</span>name);
     }
 }
 
@@ -264,7 +279,7 @@
 
 <span class="doccomment">/// Main menu features
 </span><span class="kw">mod </span>menu {
-    <span class="kw">use crate</span>::{get_amount_as_float, get_input, Bill, Bills};
+    <span class="kw">use crate</span>::{get_amount_as_float, get_input, Bills};
 
     <span class="doccomment">/// Acceps mutable reference to the &#39;Bills&#39; struct in order to add new bills to the struct
     </span><span class="kw">pub fn </span>add_bill(bills: <span class="kw-2">&amp;mut </span>Bills) {
@@ -285,8 +300,7 @@
 
         <span class="comment">// Create the bill
         // Field names are the same as the variable names, no need to do assignments, i.e.: &#39;name: name&#39;
-        </span><span class="kw">let </span>bill = Bill { name, amount };
-        bills.add(bill);
+        </span>bills.add(name, amount);
         <span class="macro">println!</span>(<span class="string">&quot;Bill added successfully!&quot;</span>);
     }
 
@@ -297,12 +311,29 @@
             </span><span class="macro">println!</span>(<span class="string">&quot;{bill:?}&quot;</span>);
         }
     }
+
+    <span class="doccomment">/// Remove a bill
+    </span><span class="kw">pub fn </span>remove_bill(bills: <span class="kw-2">&amp;mut </span>Bills) {
+        <span class="macro">println!</span>(<span class="string">&quot;Bill name:&quot;</span>);
+
+        <span class="comment">// Name
+        </span><span class="kw">let </span>name = <span class="kw">match </span>get_input() {
+            <span class="comment">// Populate &#39;name&#39; with the input, otherwise get out of the function
+            </span><span class="prelude-val">Some</span>(input) =&gt; input,
+            <span class="prelude-val">None </span>=&gt; <span class="kw">return</span>,
+        };
+
+        <span class="comment">// Remove the bill
+        </span>bills.remove(name);
+        <span class="macro">println!</span>(<span class="string">&quot;Bill removed successfully!&quot;</span>);
+    }
 }
 
 <span class="doccomment">/// Main menu options
 </span><span class="kw">enum </span>MainMenu {
     AddBill,
     ViewBill,
+    RemoveBill,
 }
 
 <span class="doccomment">/// Determine choice by implementing the &#39;MainMenu&#39; options
@@ -311,6 +342,7 @@
         <span class="kw">match </span>input {
             <span class="string">&quot;1&quot; </span>=&gt; <span class="prelude-val">Some</span>(MainMenu::AddBill),
             <span class="string">&quot;2&quot; </span>=&gt; <span class="prelude-val">Some</span>(MainMenu::ViewBill),
+            <span class="string">&quot;3&quot; </span>=&gt; <span class="prelude-val">Some</span>(MainMenu::RemoveBill),
             <span class="kw">_ </span>=&gt; <span class="prelude-val">None</span>,
         }
     }
@@ -320,13 +352,14 @@
         <span class="macro">println!</span>(<span class="string">&quot; == Billy The Bill Manager == &quot;</span>);
         <span class="macro">println!</span>(<span class="string">&quot;1. Add Bill&quot;</span>);
         <span class="macro">println!</span>(<span class="string">&quot;2. View Bill&quot;</span>);
+        <span class="macro">println!</span>(<span class="string">&quot;3. Remove Bill&quot;</span>);
         <span class="macro">println!</span>(<span class="string">&quot;&quot;</span>);
         <span class="macro">println!</span>(<span class="string">&quot;Enter selection: &quot;</span>);
     }
 }
 
 <span class="kw">fn </span>main() {
-    <span class="comment">// Create bill structure
+    <span class="comment">// Create the bill structure
     </span><span class="kw">let </span><span class="kw-2">mut </span>build_bill_struct = Bills::new();
 
     <span class="kw">loop </span>{
@@ -341,6 +374,7 @@
         </span><span class="kw">match </span>MainMenu::get_menu_string(input.as_str()) {
             <span class="prelude-val">Some</span>(MainMenu::AddBill) =&gt; menu::add_bill(<span class="kw-2">&amp;mut </span>build_bill_struct),
             <span class="prelude-val">Some</span>(MainMenu::ViewBill) =&gt; menu::view_bills(<span class="kw-2">&amp;</span>build_bill_struct),
+            <span class="prelude-val">Some</span>(MainMenu::RemoveBill) =&gt; menu::remove_bill(<span class="kw-2">&amp;mut </span>build_bill_struct),
             <span class="comment">// If &#39;None&#39; is returned, exit the program
             </span><span class="prelude-val">None </span>=&gt; <span class="kw">return</span>,
         }

@@ -31,6 +31,11 @@ impl Bills {
     fn get_all_bills(&self) -> &HashMap<String, f64> {
         return &self.info;
     }
+
+    /// Remove a bill
+    fn remove(&mut self, name: String) {
+        self.info.remove(&name);
+    }
 }
 
 /// Get the user input data as a 'String'
@@ -112,8 +117,24 @@ mod menu {
     pub fn view_bills(bills: &Bills) {
         for bill in bills.get_all_bills() {
             // Same as 'println!("{:?}", bill);'
-            println!("{:?}", bill);
+            println!("{bill:?}");
         }
+    }
+
+    /// Remove a bill
+    pub fn remove_bill(bills: &mut Bills) {
+        println!("Bill name:");
+
+        // Name
+        let name = match get_input() {
+            // Populate 'name' with the input, otherwise get out of the function
+            Some(input) => input,
+            None => return,
+        };
+
+        // Remove the bill
+        bills.remove(name);
+        println!("Bill removed successfully!");
     }
 }
 
@@ -121,6 +142,7 @@ mod menu {
 enum MainMenu {
     AddBill,
     ViewBill,
+    RemoveBill,
 }
 
 /// Determine choice by implementing the 'MainMenu' options
@@ -129,6 +151,7 @@ impl MainMenu {
         match input {
             "1" => Some(MainMenu::AddBill),
             "2" => Some(MainMenu::ViewBill),
+            "3" => Some(MainMenu::RemoveBill),
             _ => None,
         }
     }
@@ -138,6 +161,7 @@ impl MainMenu {
         println!(" == Billy The Bill Manager == ");
         println!("1. Add Bill");
         println!("2. View Bill");
+        println!("3. Remove Bill");
         println!("");
         println!("Enter selection: ");
     }
@@ -159,6 +183,7 @@ fn main() {
         match MainMenu::get_menu_string(input.as_str()) {
             Some(MainMenu::AddBill) => menu::add_bill(&mut build_bill_struct),
             Some(MainMenu::ViewBill) => menu::view_bills(&build_bill_struct),
+            Some(MainMenu::RemoveBill) => menu::remove_bill(&mut build_bill_struct),
             // If 'None' is returned, exit the program
             None => return,
         }
