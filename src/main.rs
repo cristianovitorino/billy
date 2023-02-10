@@ -1,42 +1,35 @@
-//use std::collections::HashMap;
+use std::collections::HashMap;
 use std::io;
 
-/// The bill template
+/// The bills template
 /// 'Debug' to easily print on terminal and 'Clone' to make copies of the struct
 #[derive(Debug, Clone)]
-pub struct Bill {
-    name: String,
-    amount: f64,
-}
-
-/// 'Bills' superstructure, the "storage"
 pub struct Bills {
-    /// vec![{name: String, amount: f64}]
-    inner: Vec<Bill>,
+    info: HashMap<String, f64>,
 }
 
 /// 'Bills' "storage" superstructre implementation
 impl Bills {
-    /// Instanciate a new 'Bills' struct with an empty vector
+    /// Instanciate a new 'Bills' struct with an empty HashMap
     fn new() -> Self {
-        Self { inner: vec![] }
+        Self {
+            info: HashMap::new(),
+        }
     }
 
     /// Add a new bill
-    /// '&mut self' access mutably the 'inner: Vec<Bill>' on the 'Bills' struct
-    /// The owned 'Bill' moves into the 'Bills' struct 'Vec<Bill>'
-    /// Push the new bill into the vector
-    fn add(&mut self, bill: Bill) {
-        self.inner.push(bill);
+    /// '&mut self' access mutably the 'info: HashMap<String, f64>' on the 'Bills' struct
+    /// The owned 'name' and 'amount' moves into the 'Bills' struct type 'HashMap<String, f64>'
+    /// Inserts the new bill 'info' into the HashMap
+    fn add(&mut self, name: String, amount: f64) {
+        self.info.insert(name, amount);
     }
 
     /// Print the bills
-    /// Return a reference to the vector
-    /// Reference to itself '&self' so it's able to access the 'Bills' struct
-    /// 'iter()' over all bills, automaticaly borrows
-    /// 'collect()' collects into a new vector
-    fn get_all_bills(&self) -> Vec<&Bill> {
-        self.inner.iter().collect()
+    /// Reference itself '&self' so it's able to access the 'Bills' struct
+    /// Return a reference to the 'Bill' struct info 'HashMap<String, f64>'
+    fn get_all_bills(&self) -> &HashMap<String, f64> {
+        return &self.info;
     }
 }
 
@@ -90,7 +83,7 @@ fn get_amount_as_float() -> Option<f64> {
 
 /// Main menu features
 mod menu {
-    use crate::{get_amount_as_float, get_input, Bill, Bills};
+    use crate::{get_amount_as_float, get_input, Bills};
 
     /// Acceps mutable reference to the 'Bills' struct in order to add new bills to the struct
     pub fn add_bill(bills: &mut Bills) {
@@ -111,8 +104,7 @@ mod menu {
 
         // Create the bill
         // Field names are the same as the variable names, no need to do assignments, i.e.: 'name: name'
-        let bill = Bill { name, amount };
-        bills.add(bill);
+        bills.add(name, amount);
         println!("Bill added successfully!");
     }
 
@@ -120,7 +112,7 @@ mod menu {
     pub fn view_bills(bills: &Bills) {
         for bill in bills.get_all_bills() {
             // Same as 'println!("{:?}", bill);'
-            println!("{bill:?}");
+            println!("{:?}", bill);
         }
     }
 }
@@ -152,7 +144,7 @@ impl MainMenu {
 }
 
 fn main() {
-    // Create bill structure
+    // Create the bill structure
     let mut build_bill_struct = Bills::new();
 
     loop {
