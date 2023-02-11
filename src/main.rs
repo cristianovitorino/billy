@@ -36,6 +36,32 @@ impl Bills {
     fn remove(&mut self, name: String) {
         self.info.remove(&name);
     }
+
+    fn update_key(&mut self, old_name: String, new_name: String) {
+        // Ref 1: https://stackoverflow.com/a/64997032
+
+        // Get the old value from 'name'
+        // 'unwrap()' to get the data out of the 'Option'
+        // 'clone()' to take ownership
+        let old_value = self.info.get(&old_name).unwrap();
+        let old_value = old_value.clone();
+
+        // Remove the old key
+        self.info.remove(&old_name);
+
+        // Insert a new key, keep the old value (provides a new value only if it doesn't already exist)
+        self.info.entry(new_name).or_insert_with(|| old_value);
+    }
+
+    fn update_value(&mut self, name: String, amount: f64) {
+        // Ref 1: https://doc.rust-lang.org/std/collections/hash_map/struct.HashMap.html
+        // Ref 2: https://stackoverflow.com/a/71185788
+        // Ref 3: https://doc.rust-lang.org/std/collections/hash_map/enum.Entry.html#method.and_modify
+        // Ref 4: https://www.reddit.com/r/rust/comments/s2vu1u/how_to_update_hashmap/
+        // Provides in-place mutable access to an occupied entry before any potential inserts into the map
+
+        self.info.entry(name).and_modify(|value| *value = amount);
+    }
 }
 
 /// Get the user input data as a 'String'
@@ -86,27 +112,46 @@ fn get_amount_as_float() -> Option<f64> {
     }
 }
 
+fn show_update_options() {
+    println!("");
+    println!("Bill found! What do you want to change?");
+    println!("1. Name");
+    println!("2. Value");
+    println!("");
+    println!("Enter selection: ");
+}
+
+fn get_update_input() -> Option<String> {
+    println!("Name:");
+    let mut buffer = String::new();
+    while io::stdin().read_line(&mut buffer).is_err() {
+        println!("Please enter your data again...");
+    }
+    let input = buffer.trim().to_owned();
+    if &input == "" {
+        None
+    } else {
+        Some(input)
+    }
+}
 /// Main menu features
 mod menu {
-    use crate::{get_amount_as_float, get_input, Bills};
+    use crate::{get_amount_as_float, get_input, get_update_input, show_update_options, Bills};
 
     /// Acceps mutable reference to the 'Bills' struct in order to add new bills to the struct
     pub fn add_bill(bills: &mut Bills) {
         println!("Bill name:");
-
         // Name
         let name = match get_input() {
             // Populate 'name' with the input, otherwise get out of the function
             Some(input) => input,
             None => return,
         };
-
         // Amount
         let amount = match get_amount_as_float() {
             Some(amount) => amount,
             None => return,
         };
-
         // Create the bill
         // Field names are the same as the variable names, no need to do assignments, i.e.: 'name: name'
         bills.add(name, amount);
@@ -118,23 +163,67 @@ mod menu {
         for bill in bills.get_all_bills() {
             // Same as 'println!("{:?}", bill);'
             println!("{bill:?}");
+            // TODO  Add feature to check if the hash is empty
         }
     }
 
     /// Remove a bill
     pub fn remove_bill(bills: &mut Bills) {
-        println!("Bill name:");
+        loop {
+            println!("Bill name:");
+            // Get name
+            let name = match get_input() {
+                Some(input) => input,
+                None => return,
+            };
+            // Check if data exists with that name
+            if bills.info.contains_key(&name) {
+                println!("Bill removed successfully!");
+                bills.remove(name);
+                break;
+            } else {
+                println!("No bill found with this name, try again.");
+            }
+        }
+    }
 
-        // Name
-        let name = match get_input() {
-            // Populate 'name' with the input, otherwise get out of the function
-            Some(input) => input,
-            None => return,
-        };
-
-        // Remove the bill
-        bills.remove(name);
-        println!("Bill removed successfully!");
+    /// Update a bill
+    /// Allows to change either 'key' or 'value'
+    pub fn update_bill(bills: &mut Bills) {
+        loop {
+            println!("Find bill:");
+            let old_name = match get_input() {
+                Some(input) => input,
+                None => return,
+            };
+            // Check if data exists with that name and perform apropriate actions
+            if bills.info.contains_key(&old_name) {
+                show_update_options();
+                let choice = match get_input() {
+                    Some(input) => input,
+                    None => return,
+                };
+                if choice == "1" {
+                    let new_name = match get_update_input() {
+                        Some(input) => input,
+                        None => return,
+                    };
+                    bills.update_key(old_name.to_owned(), new_name);
+                } else if choice == "2" {
+                    let new_amount = match get_amount_as_float() {
+                        Some(amount) => amount,
+                        None => return,
+                    };
+                    bills.update_value(old_name, new_amount);
+                } else {
+                    println!("Invalid choice. Try again.");
+                    // TODO  Find a way to return to previous menu
+                }
+                break;
+            } else {
+                println!("No bill found with this name, try again.");
+            }
+        }
     }
 }
 
@@ -143,6 +232,7 @@ enum MainMenu {
     AddBill,
     ViewBill,
     RemoveBill,
+    UpdateBill,
 }
 
 /// Determine choice by implementing the 'MainMenu' options
@@ -152,6 +242,7 @@ impl MainMenu {
             "1" => Some(MainMenu::AddBill),
             "2" => Some(MainMenu::ViewBill),
             "3" => Some(MainMenu::RemoveBill),
+            "4" => Some(MainMenu::UpdateBill),
             _ => None,
         }
     }
@@ -162,6 +253,7 @@ impl MainMenu {
         println!("1. Add Bill");
         println!("2. View Bill");
         println!("3. Remove Bill");
+        println!("4. Update Bill");
         println!("");
         println!("Enter selection: ");
     }
@@ -184,6 +276,7 @@ fn main() {
             Some(MainMenu::AddBill) => menu::add_bill(&mut build_bill_struct),
             Some(MainMenu::ViewBill) => menu::view_bills(&build_bill_struct),
             Some(MainMenu::RemoveBill) => menu::remove_bill(&mut build_bill_struct),
+            Some(MainMenu::UpdateBill) => menu::update_bill(&mut build_bill_struct),
             // If 'None' is returned, exit the program
             None => return,
         }
