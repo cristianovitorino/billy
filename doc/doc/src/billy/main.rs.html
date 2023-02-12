@@ -282,11 +282,29 @@
 <span id="282">282</span>
 <span id="283">283</span>
 <span id="284">284</span>
+<span id="285">285</span>
+<span id="286">286</span>
+<span id="287">287</span>
+<span id="288">288</span>
+<span id="289">289</span>
+<span id="290">290</span>
+<span id="291">291</span>
+<span id="292">292</span>
+<span id="293">293</span>
+<span id="294">294</span>
+<span id="295">295</span>
+<span id="296">296</span>
+<span id="297">297</span>
+<span id="298">298</span>
+<span id="299">299</span>
+<span id="300">300</span>
+<span id="301">301</span>
+<span id="302">302</span>
 </pre><pre class="rust"><code><span class="kw">use </span>std::collections::HashMap;
 <span class="kw">use </span>std::io;
 
 <span class="doccomment">/// The bills template
-/// &#39;Debug&#39; to easily print on terminal and &#39;Clone&#39; to make copies of the struct
+/// - &#39;Debug&#39; to easily print on terminal and &#39;Clone&#39; to make copies of the struct
 </span><span class="attribute">#[derive(Debug, Clone)]
 </span><span class="kw">pub struct </span>Bills {
     info: HashMap&lt;String, f64&gt;,
@@ -302,16 +320,16 @@
     }
 
     <span class="doccomment">/// Add a new bill
-    /// &#39;&amp;mut self&#39; access mutably the &#39;info: HashMap&lt;String, f64&gt;&#39; on the &#39;Bills&#39; struct
-    /// The owned &#39;name&#39; and &#39;amount&#39; moves into the &#39;Bills&#39; struct type &#39;HashMap&lt;String, f64&gt;&#39;
-    /// Inserts the new bill &#39;info&#39; into the HashMap
+    /// - &#39;&amp;mut self&#39; access mutably the &#39;info: HashMap&lt;String, f64&gt;&#39; on the &#39;Bills&#39; struct
+    /// - The owned &#39;name&#39; and &#39;amount&#39; moves into the &#39;Bills&#39; struct type &#39;HashMap&lt;String, f64&gt;&#39;
+    /// - Inserts the new bill &#39;info&#39; into the HashMap
     </span><span class="kw">fn </span>add(<span class="kw-2">&amp;mut </span><span class="self">self</span>, name: String, amount: f64) {
         <span class="self">self</span>.info.insert(name, amount);
     }
 
     <span class="doccomment">/// Print the bills
-    /// Reference itself &#39;&amp;self&#39; so it&#39;s able to access the &#39;Bills&#39; struct
-    /// Return a reference to the &#39;Bill&#39; struct info &#39;HashMap&lt;String, f64&gt;&#39;
+    /// - Reference itself &#39;&amp;self&#39; so it&#39;s able to access the &#39;Bills&#39; struct
+    /// - Return a reference to the &#39;Bill&#39; struct info &#39;HashMap&lt;String, f64&gt;&#39;
     </span><span class="kw">fn </span>get_all_bills(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>HashMap&lt;String, f64&gt; {
         <span class="kw">return </span><span class="kw-2">&amp;</span><span class="self">self</span>.info;
     }
@@ -321,12 +339,13 @@
         <span class="self">self</span>.info.remove(<span class="kw-2">&amp;</span>name);
     }
 
-    <span class="kw">fn </span>update_key(<span class="kw-2">&amp;mut </span><span class="self">self</span>, old_name: String, new_name: String) {
-        <span class="comment">// Ref 1: https://stackoverflow.com/a/64997032
+    <span class="doccomment">/// Remove the old key, keep the value
+    </span><span class="kw">fn </span>update_key(<span class="kw-2">&amp;mut </span><span class="self">self</span>, old_name: String, new_name: String) {
+        <span class="comment">// Ref: https://stackoverflow.com/a/64997032
 
-        // Get the old value from &#39;name&#39;
-        // &#39;unwrap()&#39; to get the data out of the &#39;Option&#39;
-        // &#39;clone()&#39; to take ownership
+        // - Get the old value from &#39;old_name&#39;
+        // - &#39;unwrap()&#39; to get the data out of the &#39;Option&#39;
+        // - &#39;clone()&#39; to take ownership
         </span><span class="kw">let </span>old_value = <span class="self">self</span>.info.get(<span class="kw-2">&amp;</span>old_name).unwrap();
         <span class="kw">let </span>old_value = old_value.clone();
 
@@ -337,13 +356,14 @@
         </span><span class="self">self</span>.info.entry(new_name).or_insert_with(|| old_value);
     }
 
-    <span class="kw">fn </span>update_value(<span class="kw-2">&amp;mut </span><span class="self">self</span>, name: String, amount: f64) {
+    <span class="doccomment">/// Update value only
+    </span><span class="kw">fn </span>update_value(<span class="kw-2">&amp;mut </span><span class="self">self</span>, name: String, amount: f64) {
         <span class="comment">// Ref 1: https://doc.rust-lang.org/std/collections/hash_map/struct.HashMap.html
         // Ref 2: https://stackoverflow.com/a/71185788
         // Ref 3: https://doc.rust-lang.org/std/collections/hash_map/enum.Entry.html#method.and_modify
         // Ref 4: https://www.reddit.com/r/rust/comments/s2vu1u/how_to_update_hashmap/
-        // Provides in-place mutable access to an occupied entry before any potential inserts into the map
 
+        // Provides in-place mutable access to an occupied entry before any potential inserts into the map
         </span><span class="self">self</span>.info.entry(name).and_modify(|value| <span class="kw-2">*</span>value = amount);
     }
 }
@@ -355,7 +375,7 @@
 
     <span class="comment">// Loop until gets valid data
     </span><span class="kw">while </span>io::stdin().read_line(<span class="kw-2">&amp;mut </span>buffer).is_err() {
-        <span class="macro">println!</span>(<span class="string">&quot;Please enter your data again...&quot;</span>);
+        <span class="macro">println!</span>(<span class="string">&quot;Please enter your data again.&quot;</span>);
     }
 
     <span class="comment">// Get rid of newline(\n) at the end using &#39;trim()&#39; and make the &#39;String&#39; owned (because &#39;buffer&#39; is a &#39;String&#39;)
@@ -363,6 +383,20 @@
 
     <span class="comment">// If empty, return nothing
     </span><span class="kw">if </span><span class="kw-2">&amp;</span>input == <span class="string">&quot;&quot; </span>{
+        <span class="prelude-val">None
+    </span>} <span class="kw">else </span>{
+        <span class="prelude-val">Some</span>(input)
+    }
+}
+
+<span class="kw">fn </span>get_update_input() -&gt; <span class="prelude-ty">Option</span>&lt;String&gt; {
+    <span class="macro">println!</span>(<span class="string">&quot;Name:&quot;</span>);
+    <span class="kw">let </span><span class="kw-2">mut </span>buffer = String::new();
+    <span class="kw">while </span>io::stdin().read_line(<span class="kw-2">&amp;mut </span>buffer).is_err() {
+        <span class="macro">println!</span>(<span class="string">&quot;Please enter your data again.&quot;</span>);
+    }
+    <span class="kw">let </span>input = buffer.trim().to_owned();
+    <span class="kw">if </span><span class="kw-2">&amp;</span>input == <span class="string">&quot;&quot; </span>{
         <span class="prelude-val">None
     </span>} <span class="kw">else </span>{
         <span class="prelude-val">Some</span>(input)
@@ -405,19 +439,6 @@
     <span class="macro">println!</span>(<span class="string">&quot;Enter selection: &quot;</span>);
 }
 
-<span class="kw">fn </span>get_update_input() -&gt; <span class="prelude-ty">Option</span>&lt;String&gt; {
-    <span class="macro">println!</span>(<span class="string">&quot;Name:&quot;</span>);
-    <span class="kw">let </span><span class="kw-2">mut </span>buffer = String::new();
-    <span class="kw">while </span>io::stdin().read_line(<span class="kw-2">&amp;mut </span>buffer).is_err() {
-        <span class="macro">println!</span>(<span class="string">&quot;Please enter your data again...&quot;</span>);
-    }
-    <span class="kw">let </span>input = buffer.trim().to_owned();
-    <span class="kw">if </span><span class="kw-2">&amp;</span>input == <span class="string">&quot;&quot; </span>{
-        <span class="prelude-val">None
-    </span>} <span class="kw">else </span>{
-        <span class="prelude-val">Some</span>(input)
-    }
-}
 <span class="doccomment">/// Main menu features
 </span><span class="kw">mod </span>menu {
     <span class="kw">use crate</span>::{get_amount_as_float, get_input, get_update_input, show_update_options, Bills};
@@ -437,7 +458,7 @@
             <span class="prelude-val">None </span>=&gt; <span class="kw">return</span>,
         };
         <span class="comment">// Create the bill
-        // Field names are the same as the variable names, no need to do assignments, i.e.: &#39;name: name&#39;
+        // - Field names are the same as the variable names, no need to do assignments, i.e.: &#39;name: name&#39;
         </span>bills.add(name, amount);
         <span class="macro">println!</span>(<span class="string">&quot;Bill added successfully!&quot;</span>);
     }
@@ -448,6 +469,7 @@
             <span class="comment">// Same as &#39;println!(&quot;{:?}&quot;, bill);&#39;
             </span><span class="macro">println!</span>(<span class="string">&quot;{bill:?}&quot;</span>);
             <span class="comment">// TODO  Add feature to check if the hash is empty
+            // TODO  Make a &quot;pretty printer&quot;
         </span>}
     }
 
@@ -455,8 +477,7 @@
     </span><span class="kw">pub fn </span>remove_bill(bills: <span class="kw-2">&amp;mut </span>Bills) {
         <span class="kw">loop </span>{
             <span class="macro">println!</span>(<span class="string">&quot;Bill name:&quot;</span>);
-            <span class="comment">// Get name
-            </span><span class="kw">let </span>name = <span class="kw">match </span>get_input() {
+            <span class="kw">let </span>name = <span class="kw">match </span>get_input() {
                 <span class="prelude-val">Some</span>(input) =&gt; input,
                 <span class="prelude-val">None </span>=&gt; <span class="kw">return</span>,
             };
@@ -472,7 +493,7 @@
     }
 
     <span class="doccomment">/// Update a bill
-    /// Allows to change either &#39;key&#39; or &#39;value&#39;
+    /// - Allows to change either &#39;key&#39; or &#39;value&#39;
     </span><span class="kw">pub fn </span>update_bill(bills: <span class="kw-2">&amp;mut </span>Bills) {
         <span class="kw">loop </span>{
             <span class="macro">println!</span>(<span class="string">&quot;Find bill:&quot;</span>);
@@ -509,6 +530,17 @@
             }
         }
     }
+    <span class="kw">pub fn </span>bill_total(bills: <span class="kw-2">&amp;mut </span>Bills) {
+        <span class="kw">let </span><span class="kw-2">mut </span>total_value = <span class="number">0.0</span>;
+        <span class="kw">for </span>(_k, v) <span class="kw">in </span>bills.info.iter() {
+            <span class="kw">if </span>v &gt; <span class="kw-2">&amp;</span><span class="number">0.0 </span>{
+                total_value += v;
+            } <span class="kw">else </span>{
+                <span class="macro">println!</span>(<span class="string">&quot;There are no values. Try entering some.&quot;</span>);
+            }
+        }
+        <span class="macro">println!</span>(<span class="string">&quot;Bill total: {:?}&quot;</span>, total_value);
+    }
 }
 
 <span class="doccomment">/// Main menu options
@@ -517,6 +549,7 @@
     ViewBill,
     RemoveBill,
     UpdateBill,
+    BillTotal,
 }
 
 <span class="doccomment">/// Determine choice by implementing the &#39;MainMenu&#39; options
@@ -527,17 +560,19 @@
             <span class="string">&quot;2&quot; </span>=&gt; <span class="prelude-val">Some</span>(MainMenu::ViewBill),
             <span class="string">&quot;3&quot; </span>=&gt; <span class="prelude-val">Some</span>(MainMenu::RemoveBill),
             <span class="string">&quot;4&quot; </span>=&gt; <span class="prelude-val">Some</span>(MainMenu::UpdateBill),
+            <span class="string">&quot;5&quot; </span>=&gt; <span class="prelude-val">Some</span>(MainMenu::BillTotal),
             <span class="kw">_ </span>=&gt; <span class="prelude-val">None</span>,
         }
     }
 
-    <span class="kw">fn </span>show() {
+    <span class="kw">pub fn </span>show() {
         <span class="macro">println!</span>(<span class="string">&quot;&quot;</span>);
         <span class="macro">println!</span>(<span class="string">&quot; == Billy The Bill Manager == &quot;</span>);
         <span class="macro">println!</span>(<span class="string">&quot;1. Add Bill&quot;</span>);
         <span class="macro">println!</span>(<span class="string">&quot;2. View Bill&quot;</span>);
         <span class="macro">println!</span>(<span class="string">&quot;3. Remove Bill&quot;</span>);
         <span class="macro">println!</span>(<span class="string">&quot;4. Update Bill&quot;</span>);
+        <span class="macro">println!</span>(<span class="string">&quot;5. Bill Total&quot;</span>);
         <span class="macro">println!</span>(<span class="string">&quot;&quot;</span>);
         <span class="macro">println!</span>(<span class="string">&quot;Enter selection: &quot;</span>);
     }
@@ -554,13 +589,14 @@
         <span class="comment">// Get input
         </span><span class="kw">let </span>input = get_input().expect(<span class="string">&quot;no data entered&quot;</span>);
 
-        <span class="comment">// &#39;match&#39; the user input to determine which feature to execute
-        // &#39;as_str()&#39; to transform &#39;String&#39; into &#39;&amp;str&#39;
+        <span class="comment">// - &#39;match&#39; the user input to determine which feature to execute
+        // - &#39;as_str()&#39; to transform &#39;String&#39; into &#39;&amp;str&#39;
         </span><span class="kw">match </span>MainMenu::get_menu_string(input.as_str()) {
             <span class="prelude-val">Some</span>(MainMenu::AddBill) =&gt; menu::add_bill(<span class="kw-2">&amp;mut </span>build_bill_struct),
             <span class="prelude-val">Some</span>(MainMenu::ViewBill) =&gt; menu::view_bills(<span class="kw-2">&amp;</span>build_bill_struct),
             <span class="prelude-val">Some</span>(MainMenu::RemoveBill) =&gt; menu::remove_bill(<span class="kw-2">&amp;mut </span>build_bill_struct),
             <span class="prelude-val">Some</span>(MainMenu::UpdateBill) =&gt; menu::update_bill(<span class="kw-2">&amp;mut </span>build_bill_struct),
+            <span class="prelude-val">Some</span>(MainMenu::BillTotal) =&gt; menu::bill_total(<span class="kw-2">&amp;mut </span>build_bill_struct),
             <span class="comment">// If &#39;None&#39; is returned, exit the program
             </span><span class="prelude-val">None </span>=&gt; <span class="kw">return</span>,
         }
