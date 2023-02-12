@@ -224,7 +224,6 @@ mod menu {
                     bills.update_value(old_name, new_amount);
                 } else {
                     println!("Invalid choice. Try again.");
-                    // TODO  Find a way to return to previous menu
                 }
                 break;
             } else {

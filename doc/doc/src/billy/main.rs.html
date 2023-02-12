@@ -308,7 +308,6 @@
 <span id="308">308</span>
 <span id="309">309</span>
 <span id="310">310</span>
-<span id="311">311</span>
 </pre><pre class="rust"><code><span class="kw">use </span>std::collections::HashMap;
 <span class="kw">use </span>std::io;
 
@@ -535,8 +534,7 @@
                     bills.update_value(old_name, new_amount);
                 } <span class="kw">else </span>{
                     <span class="macro">println!</span>(<span class="string">&quot;Invalid choice. Try again.&quot;</span>);
-                    <span class="comment">// TODO  Find a way to return to previous menu
-                </span>}
+                }
                 <span class="kw">break</span>;
             } <span class="kw">else </span>{
                 <span class="macro">println!</span>(<span class="string">&quot;No bill found with this name, try again.&quot;</span>);
