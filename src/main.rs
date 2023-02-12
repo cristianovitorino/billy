@@ -1,6 +1,10 @@
 use std::collections::HashMap;
 use std::io;
 
+// TODO  Refactor code where needed, if needed
+// TODO  Modularize the program
+// TODO  Add a persistent database
+
 /// The bills template
 /// - 'Debug' to easily print on terminal and 'Clone' to make copies of the struct
 #[derive(Debug, Clone)]
@@ -276,7 +280,7 @@ impl MainMenu {
     }
 }
 
-fn main() {
+fn run_program() -> Option<()> {
     // Create the bill structure
     let mut build_bill_struct = Bills::new();
 
@@ -285,7 +289,7 @@ fn main() {
         MainMenu::show();
 
         // Get input
-        let input = get_input().expect("no data entered");
+        let input = get_input()?;
 
         // - 'match' the user input to determine which feature to execute
         // - 'as_str()' to transform 'String' into '&str'
@@ -296,7 +300,12 @@ fn main() {
             Some(MainMenu::UpdateBill) => menu::update_bill(&mut build_bill_struct),
             Some(MainMenu::BillTotal) => menu::bill_total(&mut build_bill_struct),
             // If 'None' is returned, exit the program
-            None => return,
+            None => break,
         }
     }
+    None
+}
+
+fn main() {
+    run_program();
 }

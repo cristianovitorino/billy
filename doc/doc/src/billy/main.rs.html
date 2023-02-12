@@ -300,10 +300,23 @@
 <span id="300">300</span>
 <span id="301">301</span>
 <span id="302">302</span>
+<span id="303">303</span>
+<span id="304">304</span>
+<span id="305">305</span>
+<span id="306">306</span>
+<span id="307">307</span>
+<span id="308">308</span>
+<span id="309">309</span>
+<span id="310">310</span>
+<span id="311">311</span>
 </pre><pre class="rust"><code><span class="kw">use </span>std::collections::HashMap;
 <span class="kw">use </span>std::io;
 
-<span class="doccomment">/// The bills template
+<span class="comment">// TODO  Refactor code where needed, if needed
+// TODO  Modularize the program
+// TODO  Add a persistent database
+
+</span><span class="doccomment">/// The bills template
 /// - &#39;Debug&#39; to easily print on terminal and &#39;Clone&#39; to make copies of the struct
 </span><span class="attribute">#[derive(Debug, Clone)]
 </span><span class="kw">pub struct </span>Bills {
@@ -578,7 +591,7 @@
     }
 }
 
-<span class="kw">fn </span>main() {
+<span class="kw">fn </span>run_program() -&gt; <span class="prelude-ty">Option</span>&lt;()&gt; {
     <span class="comment">// Create the bill structure
     </span><span class="kw">let </span><span class="kw-2">mut </span>build_bill_struct = Bills::new();
 
@@ -587,7 +600,7 @@
         </span>MainMenu::show();
 
         <span class="comment">// Get input
-        </span><span class="kw">let </span>input = get_input().expect(<span class="string">&quot;no data entered&quot;</span>);
+        </span><span class="kw">let </span>input = get_input()<span class="question-mark">?</span>;
 
         <span class="comment">// - &#39;match&#39; the user input to determine which feature to execute
         // - &#39;as_str()&#39; to transform &#39;String&#39; into &#39;&amp;str&#39;
@@ -598,9 +611,14 @@
             <span class="prelude-val">Some</span>(MainMenu::UpdateBill) =&gt; menu::update_bill(<span class="kw-2">&amp;mut </span>build_bill_struct),
             <span class="prelude-val">Some</span>(MainMenu::BillTotal) =&gt; menu::bill_total(<span class="kw-2">&amp;mut </span>build_bill_struct),
             <span class="comment">// If &#39;None&#39; is returned, exit the program
-            </span><span class="prelude-val">None </span>=&gt; <span class="kw">return</span>,
+            </span><span class="prelude-val">None </span>=&gt; <span class="kw">break</span>,
         }
     }
+    <span class="prelude-val">None
+</span>}
+
+<span class="kw">fn </span>main() {
+    run_program();
 }
 </code></pre></div>
 </section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="billy" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0 (897e37553 2022-11-02)" ></div></body></html>
