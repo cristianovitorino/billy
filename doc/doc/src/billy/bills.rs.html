@@ -1,0 +1,134 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/lib/bills.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>bills.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../billy/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../billy/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../billy/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<span id="2">2</span>
+<span id="3">3</span>
+<span id="4">4</span>
+<span id="5">5</span>
+<span id="6">6</span>
+<span id="7">7</span>
+<span id="8">8</span>
+<span id="9">9</span>
+<span id="10">10</span>
+<span id="11">11</span>
+<span id="12">12</span>
+<span id="13">13</span>
+<span id="14">14</span>
+<span id="15">15</span>
+<span id="16">16</span>
+<span id="17">17</span>
+<span id="18">18</span>
+<span id="19">19</span>
+<span id="20">20</span>
+<span id="21">21</span>
+<span id="22">22</span>
+<span id="23">23</span>
+<span id="24">24</span>
+<span id="25">25</span>
+<span id="26">26</span>
+<span id="27">27</span>
+<span id="28">28</span>
+<span id="29">29</span>
+<span id="30">30</span>
+<span id="31">31</span>
+<span id="32">32</span>
+<span id="33">33</span>
+<span id="34">34</span>
+<span id="35">35</span>
+<span id="36">36</span>
+<span id="37">37</span>
+<span id="38">38</span>
+<span id="39">39</span>
+<span id="40">40</span>
+<span id="41">41</span>
+<span id="42">42</span>
+<span id="43">43</span>
+<span id="44">44</span>
+<span id="45">45</span>
+<span id="46">46</span>
+<span id="47">47</span>
+<span id="48">48</span>
+<span id="49">49</span>
+<span id="50">50</span>
+<span id="51">51</span>
+<span id="52">52</span>
+<span id="53">53</span>
+<span id="54">54</span>
+<span id="55">55</span>
+<span id="56">56</span>
+<span id="57">57</span>
+<span id="58">58</span>
+<span id="59">59</span>
+<span id="60">60</span>
+<span id="61">61</span>
+<span id="62">62</span>
+<span id="63">63</span>
+<span id="64">64</span>
+<span id="65">65</span>
+<span id="66">66</span>
+</pre><pre class="rust"><code><span class="kw">use </span>std::collections::HashMap;
+
+<span class="doccomment">/// The bills template
+/// - &#39;Debug&#39; to easily print on terminal and &#39;Clone&#39; to make copies of the struct
+</span><span class="attribute">#[derive(Debug, Clone)]
+</span><span class="kw">pub struct </span>Bills {
+    <span class="kw">pub </span>info: HashMap&lt;String, f64&gt;,
+}
+
+<span class="doccomment">/// &#39;Bills&#39; &quot;storage&quot; superstructre implementation
+</span><span class="kw">impl </span>Bills {
+    <span class="doccomment">/// Instanciate a new &#39;Bills&#39; struct with an empty HashMap
+    </span><span class="kw">pub fn </span>new() -&gt; <span class="self">Self </span>{
+        <span class="self">Self </span>{
+            info: HashMap::new(),
+        }
+    }
+
+    <span class="doccomment">/// Add a new bill
+    /// - &#39;&amp;mut self&#39; access mutably the &#39;info: HashMap&lt;String, f64&gt;&#39; on the &#39;Bills&#39; struct
+    /// - The owned &#39;name&#39; and &#39;amount&#39; moves into the &#39;Bills&#39; struct type &#39;HashMap&lt;String, f64&gt;&#39;
+    /// - Inserts the new bill &#39;info&#39; into the HashMap
+    </span><span class="kw">pub fn </span>add(<span class="kw-2">&amp;mut </span><span class="self">self</span>, name: String, amount: f64) {
+        <span class="self">self</span>.info.insert(name, amount);
+    }
+
+    <span class="doccomment">/// Print the bills
+    /// - Reference itself &#39;&amp;self&#39; so it&#39;s able to access the &#39;Bills&#39; struct
+    /// - Return a reference to the &#39;Bill&#39; struct info &#39;HashMap&lt;String, f64&gt;&#39;
+    </span><span class="kw">pub fn </span>get_all_bills(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>HashMap&lt;String, f64&gt; {
+        <span class="kw">return </span><span class="kw-2">&amp;</span><span class="self">self</span>.info;
+    }
+
+    <span class="doccomment">/// Remove a bill
+    </span><span class="kw">pub fn </span>remove(<span class="kw-2">&amp;mut </span><span class="self">self</span>, name: String) {
+        <span class="self">self</span>.info.remove(<span class="kw-2">&amp;</span>name);
+    }
+
+    <span class="doccomment">/// Remove the old key, keep the value
+    </span><span class="kw">pub fn </span>update_key(<span class="kw-2">&amp;mut </span><span class="self">self</span>, old_name: String, new_name: String) {
+        <span class="comment">// Ref: https://stackoverflow.com/a/64997032
+
+        // - Get the old value from &#39;old_name&#39;
+        // - &#39;unwrap()&#39; to get the data out of the &#39;Option&#39;
+        // - &#39;clone()&#39; to take ownership
+        </span><span class="kw">let </span>old_value = <span class="self">self</span>.info.get(<span class="kw-2">&amp;</span>old_name).unwrap();
+        <span class="kw">let </span>old_value = old_value.clone();
+
+        <span class="comment">// Remove the old key
+        </span><span class="self">self</span>.info.remove(<span class="kw-2">&amp;</span>old_name);
+
+        <span class="comment">// Insert a new key, keep the old value (provides a new value only if it doesn&#39;t already exist)
+        </span><span class="self">self</span>.info.entry(new_name).or_insert_with(|| old_value);
+    }
+
+    <span class="doccomment">/// Update value only
+    </span><span class="kw">pub fn </span>update_value(<span class="kw-2">&amp;mut </span><span class="self">self</span>, name: String, amount: f64) {
+        <span class="comment">// Ref 1: https://doc.rust-lang.org/std/collections/hash_map/struct.HashMap.html
+        // Ref 2: https://stackoverflow.com/a/71185788
+        // Ref 3: https://doc.rust-lang.org/std/collections/hash_map/enum.Entry.html#method.and_modify
+        // Ref 4: https://www.reddit.com/r/rust/comments/s2vu1u/how_to_update_hashmap/
+
+        // Provides in-place mutable access to an occupied entry before any potential inserts into the map
+        </span><span class="self">self</span>.info.entry(name).and_modify(|value| <span class="kw-2">*</span>value = amount);
+    }
+}
+</code></pre></div>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="billy" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0 (897e37553 2022-11-02)" ></div></body></html>
