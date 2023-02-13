@@ -22,8 +22,7 @@
 - [x] Simple logo
 - [ ] Improve simple logo
 - [ ] Prettier bill display
-- [ ] Persistent local database
-  - [ ] Ability to choose database location, for easy of use with third party cloud storage
+- [ ] Persistent local database with user defined location
 - [ ] Database encryption
 - [ ] Simple website
 
