@@ -9,6 +9,8 @@ A simple CLI billing application writen in Rust 🦀
 - [x] Total value of bills
 
 ## Roadmap
+- [ ] Simple logo
+- [ ] Simple website
 - [ ] Prettier bill display
 - [ ] Persistent local database
 - [ ] Database encryption
