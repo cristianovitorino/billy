@@ -6,6 +6,8 @@ A simple CLI billing application writen in Rust 🦀
 - [x] View bills
 - [x] Remove bills
 - [x] Update bills
+  - [x] Update name
+  - [x] Update value
 - [x] Total value of bills
 
 ## Roadmap
