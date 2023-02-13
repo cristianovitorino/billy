@@ -1,7 +1,7 @@
 use billy::{display::*, input::*, menu::*, structure::*};
 
 // TODO  1. Prettier bill display
-// TODO  2. Persistent local database
+// TODO  2. Persistent local database with user defined location
 // TODO  3. Database encryption
 // TODO  4. Ability to choose database location, for easy of use with third party cloud storage
 
