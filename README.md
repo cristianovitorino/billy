@@ -19,7 +19,8 @@
 - Total value of bills
 
 ## Roadmap
-- [ ] Simple logo
+- [x] Simple logo
+- [ ] Improve simple logo
 - [ ] Prettier bill display
 - [ ] Persistent local database
   - [ ] Ability to choose database location, for easy of use with third party cloud storage
