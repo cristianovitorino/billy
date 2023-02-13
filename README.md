@@ -7,7 +7,7 @@
 </h1>
 
 ## About
-`billy` is a simple CLI billing application writen in Rust 🦀
+`billy` is a CLI billing application writen in Rust 🦀
 
 ## Features
 - Add bills
