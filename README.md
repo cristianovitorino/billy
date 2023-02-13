@@ -2,13 +2,13 @@
 A simple CLI billing application writen in Rust 🦀
 
 ## Features
-- [x] Add bills
-- [x] View bills
-- [x] Remove bills
-- [x] Update bills
-  - [x] Update name
-  - [x] Update value
-- [x] Total value of bills
+- Add bills
+- View bills
+- Remove bills
+- Update bills
+  - Update name
+  - Update value
+- Total value of bills
 
 ## Roadmap
 - [ ] Simple logo
