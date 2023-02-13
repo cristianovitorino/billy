@@ -10,8 +10,9 @@ A simple CLI billing application writen in Rust 🦀
 
 ## Roadmap
 - [ ] Simple logo
-- [ ] Simple website
 - [ ] Prettier bill display
 - [ ] Persistent local database
+  - [ ] Ability to choose database location, for easy of use with third party cloud storage
 - [ ] Database encryption
-- [ ] Ability to choose database location, for easy of use with third party cloud storage
+- [ ] Simple website
+
