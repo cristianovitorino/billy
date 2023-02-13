@@ -21,11 +21,11 @@
 ## Roadmap
 - [x] Simple logo
 - [ ] Improve simple logo
+- [ ] Package source into an AppImage
 - [ ] Prettier bill display
 - [ ] Persistent local database with user defined location
 - [ ] Database encryption
 - [ ] Simple website
-
 
 ## Copyright
 
