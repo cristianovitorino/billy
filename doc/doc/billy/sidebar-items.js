@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":[["bills",""],["input",""],["menu",""],["options",""]]};
+window.SIDEBAR_ITEMS = {"mod":[["display",""],["input",""],["menu",""],["structure",""]]};

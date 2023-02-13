@@ -1,3 +1,3 @@
 (function() {var implementors = {
-"billy":[["impl <a class=\"trait\" href=\"https://doc.rust-lang.org/1.65.0/core/fmt/trait.Debug.html\" title=\"trait core::fmt::Debug\">Debug</a> for <a class=\"struct\" href=\"billy/bills/struct.Bills.html\" title=\"struct billy::bills::Bills\">Bills</a>"]]
+"billy":[["impl <a class=\"trait\" href=\"https://doc.rust-lang.org/1.65.0/core/fmt/trait.Debug.html\" title=\"trait core::fmt::Debug\">Debug</a> for <a class=\"struct\" href=\"billy/structure/struct.Bills.html\" title=\"struct billy::structure::Bills\">Bills</a>"]]
 };if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

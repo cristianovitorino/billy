@@ -1,4 +1,4 @@
-pub mod bills;
+pub mod structure;
+pub mod display;
 pub mod input;
 pub mod menu;
-pub mod options;

@@ -1,4 +1,4 @@
-use billy::{bills::*, input::*, menu::*, options::*};
+use billy::{display::*, input::*, menu::*, structure::*};
 
 // TODO  1. Prettier bill display
 // TODO  2. Persistent local database

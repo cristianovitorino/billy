@@ -1,4 +1,4 @@
-use super::{bills::*, input::*, options::*};
+use super::{structure::*, display::*, input::*};
 
 /// Acceps mutable reference to the 'Bills' struct in order to add new bills to the struct
 pub fn add_bill(bills: &mut Bills) {
