@@ -23,9 +23,9 @@
 - [ ] Improve simple logo
 - [ ] Package source into an `AppImage`
 - [ ] Prettier bill display
-- [ ] Persistent local single file database
+- [ ] Persistent local single file database designed for use with third party cloud storage
     - [ ] User defined location
-    - [ ] Encryption for use with third party cloud storage
+    - [ ] Encryption
 - [ ] Simple website
 
 ## Copyright
