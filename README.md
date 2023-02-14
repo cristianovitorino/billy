@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://raw.githubusercontent.com/cristianovitorino/billy/main/icon.png" alt="icon" width="150"/>
+    <img src="https://raw.githubusercontent.com/cristianovitorino/billy/main/new-icon.png" alt="icon" width="150"/>
 </p>
 
 <h1 align="center">
