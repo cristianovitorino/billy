@@ -20,9 +20,10 @@
 
 ## Roadmap
 - [x] Simple logo
+- [x] Prettier bill display
 - [ ] Improve simple logo
 - [ ] Package source into an `AppImage`
-- [ ] Prettier bill display
+- [ ] Add language selection
 - [ ] Persistent local single file database designed for use with third party cloud storage
     - [ ] User defined location
     - [ ] Encryption
@@ -30,7 +31,7 @@
 
 ## Copyright
 
-Billy © Cristiano Vitorino, [BSD-3-Clause license](https://opensource.org/licenses/BSD-3-Clause) 
+Billy © Cristiano Vitorino, [BSD-3-Clause license](https://opensource.org/licenses/BSD-3-Clause)
 
 <div>
 The Billy logo is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License</a>

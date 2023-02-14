@@ -1,3 +1,6 @@
+use colored::*;
+
+/// 'Update Bill' submenu
 pub fn show_update_options() {
     println!("");
     println!("Bill found! What do you want to change?");
@@ -30,13 +33,24 @@ impl MainMenu {
     }
 
     pub fn show() {
+        // Ref: https://www.w3.org/TR/xml-entity-names/025.html
         println!("");
-        println!(" == Billy The Bill Manager == ");
+        println!("┌────────────────────────┐");
+        println!("{}", "│ Billy The Bill Manager │".bold());
+        println!("└────────────────────────┘");
+        println!("");
         println!("1. Add Bill");
         println!("2. View Bill");
         println!("3. Remove Bill");
         println!("4. Update Bill");
         println!("5. Bill Total");
+        println!("");
+        println!(
+            "{}",
+            "You can press 'Enter' at any point to get back to this menu"
+                .italic()
+                .dimmed()
+        );
         println!("");
         println!("Enter selection: ");
     }

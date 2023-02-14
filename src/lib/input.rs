@@ -21,11 +21,12 @@ pub fn get_input() -> Option<String> {
     }
 }
 
+/// Get user input after the 'Update Bill' main menu option is chosen
 pub fn get_update_input() -> Option<String> {
     println!("Name:");
     let mut buffer = String::new();
     while io::stdin().read_line(&mut buffer).is_err() {
-        println!("Please enter your data again.");
+        println!("Error, please enter your data again");
     }
     let input = buffer.trim().to_owned();
     if &input == "" {
@@ -52,7 +53,7 @@ pub fn get_amount_as_float() -> Option<f64> {
             return None;
         }
 
-        // Parse the input string into a float
+        // Parse the input 'String' into a ´f64'
         // Let Rust figure out the error type since it's not relevant
         let parsed_input: Result<f64, _> = input.parse();
         match parsed_input {

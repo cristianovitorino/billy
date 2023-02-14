@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"fn":[["get_amount_as_float","Transform the ‘String’ bill amount input into a ‘f64’"],["get_input","Get the user input data as a ‘String’"],["get_update_input",""]]};

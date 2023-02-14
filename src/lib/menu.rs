@@ -1,4 +1,5 @@
-use super::{structure::*, display::*, input::*};
+use super::{display::*, input::*, structure::*};
+use colored::*;
 
 /// Acceps mutable reference to the 'Bills' struct in order to add new bills to the struct
 pub fn add_bill(bills: &mut Bills) {
@@ -17,16 +18,24 @@ pub fn add_bill(bills: &mut Bills) {
     // Create the bill
     // - Field names are the same as the variable names, no need to do assignments, i.e.: 'name: name'
     bills.add(name, amount);
-    println!("Bill added successfully!");
+    println!("");
+    println!("{}", "Bill added successfully".italic().dimmed());
 }
 
 /// View all bills
 pub fn view_bills(bills: &Bills) {
-    for bill in bills.get_all_bills() {
-        // Same as 'println!("{:?}", bill);'
-        println!("{bill:?}");
-        // TODO  Add feature to check if the hash is empty
-        // TODO  Make a "pretty printer"
+    if bills.info.is_empty() {
+        println!("");
+        println!("{}", "There is no bill data to display".italic().dimmed());
+    } else {
+        println!("{0: <12} │ {1: <12}", "NAME".bold(), "AMOUNT".bold());
+        for (k, v) in bills.get_all_bills() {
+            // Ref 1: https://stackoverflow.com/a/69981450
+            // Ref 2: https://crates.io/crates/colored
+
+            println!("{0: <12}{1: <12}", "─────────────┼", "──────────────");
+            println!("{0: <12} │ {1: <12}", k.italic(), v)
+        }
     }
 }
 
@@ -40,11 +49,15 @@ pub fn remove_bill(bills: &mut Bills) {
         };
         // Check if data exists with that name
         if bills.info.contains_key(&name) {
-            println!("Bill removed successfully!");
+            println!("Bill removed successfully");
             bills.remove(name);
             break;
         } else {
-            println!("No bill found with this name, try again.");
+            println!("");
+            println!(
+                "{}",
+                "No bill found with this name, try again".italic().dimmed()
+            );
         }
     }
 }
@@ -58,7 +71,7 @@ pub fn update_bill(bills: &mut Bills) {
             Some(input) => input,
             None => return,
         };
-        // Check if data exists with that name and perform apropriate actions
+        // Check if data exists with that name and perform appropriate actions
         if bills.info.contains_key(&old_name) {
             show_update_options();
             let choice = match get_input() {
@@ -71,29 +84,40 @@ pub fn update_bill(bills: &mut Bills) {
                     None => return,
                 };
                 bills.update_key(old_name.to_owned(), new_name);
+                println!("");
+                println!("{}", "Bill name updated successfully".italic().dimmed());
             } else if choice == "2" {
                 let new_amount = match get_amount_as_float() {
                     Some(amount) => amount,
                     None => return,
                 };
                 bills.update_value(old_name, new_amount);
+                println!("");
+                println!("{}", "Bill value updated successfully".italic().dimmed());
             } else {
-                println!("Invalid choice. Try again.");
+                println!("");
+                println!("{}", "Invalid choice. Try again".italic().dimmed());
             }
             break;
         } else {
-            println!("No bill found with this name, try again.");
+            println!("");
+            println!(
+                "{}",
+                "No bill found with this name, try again".italic().dimmed()
+            );
         }
     }
 }
 pub fn bill_total(bills: &mut Bills) {
     let mut total_value = 0.0;
-    for (_k, v) in bills.info.iter() {
-        if v > &0.0 {
+    if bills.info.is_empty() {
+        println!("");
+        println!("{}", "There is no bill data to display".italic().dimmed());
+    } else {
+        for (_k, v) in bills.info.iter() {
             total_value += v;
-        } else {
-            println!("There are no values. Try entering some.");
         }
+        println!("");
+        println!("{} {}", "Bill total:".bold(), total_value);
     }
-    println!("Bill total: {:?}", total_value);
 }

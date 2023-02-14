@@ -1,9 +1,13 @@
 use billy::{display::*, input::*, menu::*, structure::*};
 
-// TODO  1. Prettier bill display
-// TODO  2. Persistent local database with user defined location
-// TODO  3. Database encryption
-// TODO  4. Ability to choose database location, for easy of use with third party cloud storage
+/*
+- TODO  Improve simple logo
+- TODO  Package source into an `AppImage`
+- TODO  Persistent local single file database designed for use with third party cloud storage
+  - TODO  User defined location
+  - TODO  Encryption
+- TODO  Simple website
+*/
 
 // Ref 1: https://doc.rust-lang.org/edition-guide/rust-2018/path-changes.html
 // Ref 2: https://stackoverflow.com/a/26390046
