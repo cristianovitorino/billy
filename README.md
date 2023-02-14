@@ -21,7 +21,7 @@
 ## Roadmap
 - [x] Simple logo
 - [x] Prettier bill display
-- [ ] Improve simple logo
+- [x] Improve simple logo
 - [ ] Package source into an `AppImage`
 - [ ] Add language selection
 - [ ] Persistent local single file database designed for use with third party cloud storage
