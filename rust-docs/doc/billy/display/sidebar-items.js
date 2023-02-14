@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":[["MainMenu","Main menu options"]],"fn":[["show_update_options","‘Update Bill’ submenu"]]};

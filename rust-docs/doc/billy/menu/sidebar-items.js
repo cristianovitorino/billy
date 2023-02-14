@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"fn":[["add_bill","Acceps mutable reference to the ‘Bills’ struct in order to add new bills to the struct"],["bill_total",""],["remove_bill","Remove a bill"],["update_bill","Update a bill"],["view_bills","View all bills"]]};
