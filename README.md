@@ -18,11 +18,16 @@
   - Update value
 - Total value of bills
 
+## Run
+```
+chmod +x billy
+./billy
+```
+
 ## Roadmap
 - [x] Simple logo
 - [x] Prettier bill display
 - [x] Improve simple logo
-- [ ] Package source into an `AppImage`
 - [ ] Add language selection
 - [ ] Persistent local single file database designed for use with third party cloud storage
     - [ ] User defined location
