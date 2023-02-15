@@ -18,8 +18,9 @@
   - Update value
 - Total value of bills
 
-## Run
+## Download and Run
 ```
+gh release download --repo cristianovitorino/billy --pattern billy
 chmod +x billy
 ./billy
 ```
