@@ -1,13 +1,6 @@
 use billy::{display::*, input::*, menu::*, structure::*};
 
-/*
-- TODO  Improve simple logo
-- TODO  Package source into an `AppImage`
-- TODO  Persistent local single file database designed for use with third party cloud storage
-  - TODO  User defined location
-  - TODO  Encryption
-- TODO  Simple website
-*/
+// TODO  Update codebase implementing 'generic types'
 
 // Ref 1: https://doc.rust-lang.org/edition-guide/rust-2018/path-changes.html
 // Ref 2: https://stackoverflow.com/a/26390046
